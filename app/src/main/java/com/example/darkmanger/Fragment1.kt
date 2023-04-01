@@ -69,29 +69,29 @@ class Fragment1 : Fragment() {
         val date= DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC).format(Instant.now())
 
         btn1.setOnClickListener{
-            var device1 = Device("device1",1, Instant.now(), Instant.now(), GameType.SINGLE, 0,start)
+            val device1 = Device("device1",1, Instant.now(), Instant.now(), GameType.SINGLE, 0,start)
             startOrPause(btn1,device1,startTimeTV)
         }
         btn2.setOnClickListener{
-            var device2 = Device("device2",2,
+            val device2 = Device("device2",2,
                 Instant.now(),
                 Instant.now(), GameType.SINGLE, 0,start2)
             startOrPause(btn2,device2,startTimeTV2)
         }
         btn3.setOnClickListener{
-            var device3 = Device("device3",3,
+            val device3 = Device("device3",3,
                 Instant.now(),
                 Instant.now(), GameType.SINGLE, 0,start3)
             startOrPause(btn3,device3,startTimeTV3)
         }
         btn4.setOnClickListener{
-            var device4 = Device("device4",4,
+            val device4 = Device("device4",4,
                 Instant.now(),
                 Instant.now(), GameType.SINGLE, 0,start4)
             startOrPause(btn4,device4,startTimeTV4)
         }
         btn5.setOnClickListener{
-            var device5 = Device("device5",5,
+            val device5 = Device("device5",5,
                 Instant.now(),
                 Instant.now(), GameType.SINGLE, 0,start5)
             startOrPause(btn5,device5,startTimeTV5)
@@ -116,28 +116,49 @@ class Fragment1 : Fragment() {
     private fun startOrPause(btn:Button, device: Device, textView: TextView) {
 
         if (!device.isPlaying) {
+            btn.text = "stop"
+            device.isPlaying = true
             when(btn){
                 btn1 ->{
                     instant1= Instant.now()
                     device.startTime = instant1
                     start =true
+                    viewModel.addNewDevice(
+                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start
+                    )
                 }
                 btn2 ->{
                     instant2= Instant.now()
                     device.startTime = instant2
-                    start2 =true }
+                    start2 =true
+                    viewModel.addNewDevice(
+                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start2
+                    )
+                }
                 btn3 ->{
                     instant3= Instant.now()
                     device.startTime = instant3
-                    start3 =true }
+                    start3 =true
+                    viewModel.addNewDevice(
+                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start3
+                    )
+                }
                 btn4 ->{
                     instant4= Instant.now()
                     device.startTime = instant4
-                    start4 =true }
+                    start4 =true
+                    viewModel.addNewDevice(
+                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start4
+                    )
+                }
                 btn5 ->{
                     instant5= Instant.now()
                     device.startTime = instant5
-                    start5 =true }
+                    start5 =true
+                    viewModel.addNewDevice(
+                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start5
+                    )
+                }
 
             }
             when(textView){
@@ -172,13 +193,7 @@ class Fragment1 : Fragment() {
                         .ofPattern(" HH:mm:ss a")
                         .withZone(ZoneId.of("UTC+2"))
                         .format(device.startTime)}
-
-
             }
-
-            btn.text = "stop"
-            device.isPlaying = true
-
 
         }
         else {
@@ -186,29 +201,29 @@ class Fragment1 : Fragment() {
             device.isPlaying = false
             when(btn){
                 btn1 ->{
-                    calcCost(instant1,device)
+                    calcCost(instant1,device,device.dId)
                     start=false
                     startTimeTV.visibility=View.GONE
                 }
                 btn2 ->{
                     startTimeTV2.visibility=View.GONE
 
-                    calcCost(instant2,device)
+                    calcCost(instant2,device,device.dId)
                     start2=false}
                 btn3 ->{
                     startTimeTV3.visibility=View.GONE
 
-                    calcCost(instant3,device)
+                    calcCost(instant3,device,device.dId)
                     start3=false}
                 btn4 ->{
                     startTimeTV4.visibility=View.GONE
 
-                    calcCost(instant4,device)
+                    calcCost(instant4,device,device.dId)
                     start4=false}
                 btn5 ->{
                     startTimeTV5.visibility=View.GONE
 
-                    calcCost(instant5,device)
+                    calcCost(instant5,device,device.dId)
                     start5=false}
 
             }
@@ -233,7 +248,7 @@ class Fragment1 : Fragment() {
     }
 
 
-    private fun showDialog(title: Device,minutes:Long,activity: Activity) {
+    private fun showDialog(title: Device,minutes:Long,activity: Activity,did:Int) {
         val dialog = Dialog(activity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -244,28 +259,28 @@ class Fragment1 : Fragment() {
 
         yesBtn.setOnClickListener {
             dialog.dismiss()
-            sendToFireStore(GameType.MULTY,title,minutes,requireActivity())
+            sendToFireStore(GameType.MULTY,title,minutes,requireActivity(),did)
 
         }
         noBtn.setOnClickListener {
             dialog.dismiss()
-            sendToFireStore(GameType.SINGLE,title,minutes,requireActivity())
+            sendToFireStore(GameType.SINGLE,title,minutes,requireActivity(),did)
 
         }
         dialog.show()
 
 
     }
-    private fun calcCost(instant: Instant,device: Device){
+    private fun calcCost(instant: Instant, device: Device, dId: Int){
         val instant2 = Instant.now()
         val diff: Duration = Duration.between(instant, instant2)
         val minutes = diff.toMinutes()
         device.endTime = instant2
-        showDialog(device, minutes, requireActivity())
+        showDialog(device, minutes, requireActivity(),dId)
     }
-    private fun sendToFireStore(type:GameType,title: Device,minutes:Long,activity: Activity){
+    private fun sendToFireStore(type:GameType,title: Device,minutes:Long,activity: Activity,did:Int){
 
-        var price:Double
+        val price:Double
         if(type==GameType.MULTY){
             price = if(title.name == "device3"){
                 minutes.toDouble() *(40.0/60.0)
@@ -277,8 +292,8 @@ class Fragment1 : Fragment() {
             title.price = price.toInt()
 
             Toast.makeText(activity,"price is $price  ", Toast.LENGTH_LONG).show()
-            viewModel.addNewDevice(
-                title.name,title.id,title.startTime,title.endTime,title.type,price.toInt(),title.isPlaying
+            viewModel.updateDevice(
+                title.name,title.id,title.startTime,title.endTime,title.type,price.toInt(),false,did
             )
             val map = HashMap<String,Any>()
             map[title.name] = title.name
@@ -326,8 +341,8 @@ class Fragment1 : Fragment() {
                 .format(title.startTime)
             val dayRef=db.collection(date).document()
             dayRef.set(map)
-            viewModel.addNewDevice(
-                title.name,title.id,title.startTime,title.endTime,title.type,price.toInt(),title.isPlaying
+            viewModel.updateDevice(
+                title.name,title.id,title.startTime,title.endTime,title.type,price.toInt(),false,did
             )
             //db.collection("Money").add(map)
         }
