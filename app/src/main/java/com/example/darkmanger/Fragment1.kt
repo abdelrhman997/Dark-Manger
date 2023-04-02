@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -30,11 +31,11 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("SetTextI18n")
 class Fragment1 : Fragment() {
-    private lateinit var btn1: Button
-    private lateinit var btn2: Button
-    private lateinit var btn3: Button
-    private lateinit var btn4: Button
-    private lateinit var btn5: Button
+    private lateinit var btn1: ImageButton
+    private lateinit var btn2: ImageButton
+    private lateinit var btn3: ImageButton
+    private lateinit var btn4: ImageButton
+    private lateinit var btn5: ImageButton
     private lateinit var startTimeTV: TextView
     private lateinit var startTimeTV2: TextView
     private lateinit var startTimeTV3: TextView
@@ -113,10 +114,11 @@ class Fragment1 : Fragment() {
         return view
     }
 
-    private fun startOrPause(btn:Button, device: Device, textView: TextView) {
+    private fun startOrPause(btn:ImageButton, device: Device, textView: TextView) {
 
         if (!device.isPlaying) {
-            btn.text = "stop"
+            btn.setImageResource(R.drawable.baseline_stop_24)
+          //  btn.text = "stop"
             device.isPlaying = true
             when(btn){
                 btn1 ->{
@@ -197,7 +199,9 @@ class Fragment1 : Fragment() {
 
         }
         else {
-            btn.text = "start"
+            btn.setImageResource(R.drawable.baseline_play_arrow_24)
+
+//            btn.text = "start"
             device.isPlaying = false
             when(btn){
                 btn1 ->{

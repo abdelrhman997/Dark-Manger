@@ -28,9 +28,14 @@
 <!--        android:name="com.example.bikedelivaryapp.admin.AdminActivity"-->
 <!--        android:label="activity_admin"-->
 <!--        tools:layout="@layout/activity_admin" />-->
-    <activity
-        android:id="@+id/loginActivity"
-        android:name="com.example.healthandcare.LoginActivity"
-        android:label="activity_login"
-        tools:layout="@layout/activity_login" />
+<!--    <activity-->
+<!--        android:id="@+id/loginActivity"-->
+<!--        android:name="com.example.healthandcare.LoginActivity"-->
+<!--        android:label="activity_login"-->
+<!--        tools:layout="@layout/activity_login" />-->
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="com.example.darkmanger.Fragment2"
+        android:label="Fragment2"
+        tools:layout="@layout/fragment_fragment2"/>
 </navigation>
