@@ -10,10 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -40,6 +37,7 @@ class Fragment2 : Fragment() {
     lateinit var db: FirebaseFirestore
     lateinit var binding:FragmentFragment2Binding
     var totalmoneyEarned :Long =0
+    var date:String ?= null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_fragment2, container, false
@@ -53,6 +51,8 @@ class Fragment2 : Fragment() {
                 binding.editTextTextPersonName.visibility= View.GONE
                 binding.button.visibility= View.GONE
                 binding.button2.visibility= View.VISIBLE
+                binding.textView3.visibility= View.VISIBLE
+                binding.calenderLay.visibility= View.VISIBLE
 
             }
             else{
@@ -60,12 +60,40 @@ class Fragment2 : Fragment() {
             }
         }
         db=FirebaseFirestore.getInstance()
-        val date= DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC).format(Instant.now())
+        date= DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC).format(Instant.now())
 
         button=view.findViewById(R.id.button2)
         textView=view.findViewById(R.id.textView)
+
+        binding.calendarView
+            .setOnDateChangeListener { _, year, month, dayOfMonth ->
+//                val Date = (dayOfMonth.toString() + "-" + (month + 1) + "-" + year)
+                var newMonth:String ?=null
+                var newDay:String?=null
+                if(month+1 <10){
+                    newMonth=String.format("%02d", month+1);
+                    Log.i(TAG, "onCreateView: $newMonth")
+
+                }else{
+                        newMonth=(month+1).toString()
+                    }
+                if(dayOfMonth<10){
+                    newDay=String.format("%02d", dayOfMonth);
+
+//                    newDay= "0$dayOfMonth"
+                }else{
+                    newDay=dayOfMonth.toString()
+                }
+//                val Date = (year.toString() + "-" + (month + 1) + "-" + dayOfMonth)
+                date = ("$year-$newMonth-$newDay")
+
+                // set this date in TextView for Display
+               // Toast.makeText(activity, Date, Toast.LENGTH_LONG).show()
+            }
         button.setOnClickListener {
             textView.text="Calc .."
+            binding.progressBar.visibility=View.VISIBLE
+
             //Log.i(TAG, "onCreate: ")
             db.collection(date.toString())
                 .get().addOnSuccessListener{result->
@@ -78,6 +106,8 @@ class Fragment2 : Fragment() {
                         totalmoneyEarned += ps
                     }
                     textView.text="$totalmoneyEarned EGP"
+                    binding.progressBar.visibility=View.GONE
+
                     totalmoneyEarned=0
 
                 }
