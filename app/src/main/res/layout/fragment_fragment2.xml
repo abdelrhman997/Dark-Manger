@@ -1,29 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_gravity="center"
-        android:layout_marginTop="80dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="get today earnings" />
+    </data>
 
-    <TextView
-        android:id="@+id/textView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:textSize="40sp"
-        android:fontFamily="@font/acme"
-        android:textColor="#000"
-        android:layout_marginTop="16dp"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/button2"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_width="wrap_content"
+
+            android:backgroundTint="#012599"
+            android:layout_height="wrap_content"
+            android:text="get today earnings" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:textSize="40sp"
+            android:fontFamily="@font/acme"
+            android:textColor="#000"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
+            android:text="0 EPG" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This page is not availble for narmal user as it contains a senstive information so don't try to enter invalid password to avoid blocking list"
+            android:fontFamily="@font/acme"
+            android:textSize="20sp"
+            android:textColor="#013599"
+            android:gravity="center"
+            android:layout_marginTop="32dp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter password"
+            android:fontFamily="@font/acme"
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:gravity="center"
+            android:layout_marginTop="32dp" />
+
+        <EditText
+            android:id="@+id/editTextTextPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="1"
+            android:inputType="numberPassword"
+            android:hint="password"
+            android:layout_margin="16dp"
+            android:maxLines="1"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#012599"
+            android:text="login as admin" />
+    </LinearLayout>
+</layout>

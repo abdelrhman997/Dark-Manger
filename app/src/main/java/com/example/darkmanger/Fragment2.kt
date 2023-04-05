@@ -15,8 +15,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.darkmanger.databinding.FragmentFragment2Binding
 import com.example.darkmanger.model.Device
 import com.example.darkmanger.model.GameType
 import com.example.darkmanger.viewmodels.UsageViewModel
@@ -36,18 +38,35 @@ class Fragment2 : Fragment() {
     lateinit var textView: TextView
     private val TAG = "MainActivity"
     lateinit var db: FirebaseFirestore
-
+    lateinit var binding:FragmentFragment2Binding
     var totalmoneyEarned :Long =0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_fragment2, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_fragment2, container, false
+        )
+        val view: View = binding.root
+        binding.button.setOnClickListener {
+            if(binding.editTextTextPersonName.text.toString() == "1234"){
+                binding.textView1.visibility= View.GONE
+                binding.textView2.visibility= View.GONE
+                binding.textView.visibility= View.VISIBLE
+                binding.editTextTextPersonName.visibility= View.GONE
+                binding.button.visibility= View.GONE
+                binding.button2.visibility= View.VISIBLE
+
+            }
+            else{
+                Toast.makeText(activity,"invalid pass ",Toast.LENGTH_SHORT).show()
+            }
+        }
         db=FirebaseFirestore.getInstance()
         val date= DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC).format(Instant.now())
 
         button=view.findViewById(R.id.button2)
         textView=view.findViewById(R.id.textView)
         button.setOnClickListener {
-            textView.text="demo"
-            Log.i(TAG, "onCreate: ")
+            textView.text="Calc .."
+            //Log.i(TAG, "onCreate: ")
             db.collection(date.toString())
                 .get().addOnSuccessListener{result->
                     for(document in result){
