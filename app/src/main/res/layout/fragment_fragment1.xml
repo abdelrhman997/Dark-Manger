@@ -1,229 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+    name="imageStatus"
+    type="boolean" />
+        <variable
+            name="imageStatus2"
+            type="boolean" />
+        <variable
+            name="imageStatus3"
+            type="boolean" />
+        <variable
+            name="imageStatus4"
+            type="boolean" />
+        <variable
+            name="imageStatus5"
+            type="boolean" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ps4"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/acme"
-            android:text="Device 1"
-            android:textColor="#000"
-            android:textSize="20sp" />
-
-        <ImageButton
-            android:id="@+id/btn1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="32dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
             android:background="#fff"
-            android:src="@drawable/baseline_play_arrow_24"
-            android:text="Start" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/startTimeTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:text="start time"
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:visibility="gone" />
-    </LinearLayout>
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ps4" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ps4"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Device 2"
-            android:textColor="#000"
-            android:fontFamily="@font/acme"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/acme"
+                android:text="Device 1"
+                android:textColor="#000"
+                android:textSize="20sp" />
 
-        <ImageButton
-            android:id="@+id/btn2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="32dp"
+            <ImageButton
+                android:id="@+id/btn1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:background="#fff"
+                android:src="@{imageStatus ?@drawable/baseline_stop_24: @drawable/baseline_play_arrow_24, default=@drawable/baseline_play_arrow_24}"
+                android:text="Start" />
+
+            <TextView
+                android:id="@+id/startTimeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:text="start time"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:visibility="@{imageStatus ? View.VISIBLE : View.GONE}"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
             android:background="#fff"
-            android:src="@drawable/baseline_play_arrow_24"
-            android:text="Start" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/startTimeTV2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:text="start time"
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:visibility="gone" />
-    </LinearLayout>
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ps4" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ps5"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Device 3"
-            android:textColor="#000"
-            android:fontFamily="@font/acme"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Device 2"
+                android:textColor="#000"
+                android:fontFamily="@font/acme"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp" />
 
-        <ImageButton
-            android:id="@+id/btn3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="32dp"
+            <ImageButton
+                android:id="@+id/btn2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:background="#fff"
+                android:src="@{imageStatus2 ?@drawable/baseline_stop_24: @drawable/baseline_play_arrow_24 , default=@drawable/baseline_play_arrow_24 }"
+                android:text="Start" />
+
+            <TextView
+                android:id="@+id/startTimeTV2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:text="start time"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:visibility="@{imageStatus2 ? View.VISIBLE : View.GONE}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
             android:background="#fff"
-            android:src="@drawable/baseline_play_arrow_24"
-            android:textSize="20sp" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/startTimeTV3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:text="start time"
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:visibility="gone" />
-    </LinearLayout>
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ps5" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ps4"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Device 4"
-            android:textColor="#000"
-            android:fontFamily="@font/acme"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Device 3"
+                android:textColor="#000"
+                android:fontFamily="@font/acme"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp" />
 
-        <ImageButton
-            android:id="@+id/btn4"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="32dp"
+            <ImageButton
+                android:id="@+id/btn3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:background="#fff"
+                android:src="@{imageStatus3 ?@drawable/baseline_stop_24: @drawable/baseline_play_arrow_24 , default=@drawable/baseline_play_arrow_24 }"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/startTimeTV3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:text="start time"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:visibility="@{imageStatus3 ? View.VISIBLE : View.GONE}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
             android:background="#fff"
-            android:src="@drawable/baseline_play_arrow_24"
-            android:textColor="#fff"
-            android:textSize="20sp" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/startTimeTV4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:text="start time"
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:visibility="gone" />
-    </LinearLayout>
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ps4" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ps4"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Device 5"
-            android:textColor="#000"
-            android:fontFamily="@font/acme"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Device 4"
+                android:textColor="#000"
+                android:fontFamily="@font/acme"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp" />
 
-        <ImageButton
-            android:id="@+id/btn5"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="32dp"
+            <ImageButton
+                android:id="@+id/btn4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:background="#fff"
+                android:src="@{imageStatus4 ?@drawable/baseline_stop_24: @drawable/baseline_play_arrow_24 , default=@drawable/baseline_play_arrow_24}"
+                android:textColor="#fff"
+                android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/startTimeTV4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:text="start time"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:visibility="@{imageStatus4 ? View.VISIBLE : View.GONE}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
             android:background="#fff"
-            android:src="@drawable/baseline_play_arrow_24"
-            android:textSize="20sp" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/startTimeTV5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:text="start time"
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:visibility="gone" />
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ps4" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Device 5"
+                android:textColor="#000"
+                android:fontFamily="@font/acme"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp" />
+
+            <ImageButton
+                android:id="@+id/btn5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+
+                android:background="#fff"
+                android:src="@{imageStatus5 ?@drawable/baseline_stop_24: @drawable/baseline_play_arrow_24 , default=@drawable/baseline_play_arrow_24}"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/startTimeTV5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:text="start time"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:visibility="@{imageStatus5 ? View.VISIBLE : View.GONE}" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Button" />
-</LinearLayout>
+</layout>

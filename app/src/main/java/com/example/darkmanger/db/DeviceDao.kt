@@ -16,8 +16,8 @@ interface DeviceDao {
     suspend fun delete(device: Device)
 
     @Query("SELECT * from device WHERE id = :id")
-    fun getDevice(id: Int): Flow<Device>
-
+//    fun getDevice(id: Int): Flow<Device>
+    fun getDevice(id: Int): Device
     @Query("SELECT * from device ORDER BY name ASC")
     fun getDevices(): Flow<List<Device>>
 }

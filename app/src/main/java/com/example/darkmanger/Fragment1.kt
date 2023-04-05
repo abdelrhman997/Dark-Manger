@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.darkmanger.databinding.FragmentFragment1Binding
 import com.example.darkmanger.model.Device
 import com.example.darkmanger.model.GameType
 import com.example.darkmanger.viewmodels.UsageViewModel
@@ -42,193 +43,173 @@ class Fragment1 : Fragment() {
     private lateinit var startTimeTV4: TextView
     private lateinit var startTimeTV5: TextView
 
-    private lateinit var instant1: Instant
-    private lateinit var instant2: Instant
-    private lateinit var instant3: Instant
-    private lateinit var instant4: Instant
-    private lateinit var instant5: Instant
     private val TAG = "MainActivity"
-    private var start = false
-    private var start2 = false
-    private var start3 = false
-    private var start4 = false
-    private var start5 = false
-    lateinit var db: FirebaseFirestore
-    private lateinit var button: Button
-    var totalMoneyEarned:Int =0
 
+    lateinit var db: FirebaseFirestore
+    lateinit var binding:FragmentFragment1Binding
     private val viewModel: UsageViewModel by activityViewModels {
         UsageViewModelFactory(
             (activity?.application as UsageApplication).database
                 .deviceDao()
         )
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_fragment1, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_fragment1, container, false
+        )
+        val view: View = binding.root
+        binding.imageStatus = viewModel.start1.value!!
+        binding.imageStatus2= viewModel.start2.value!!
+        binding.imageStatus3= viewModel.start3.value!!
+        binding.imageStatus4= viewModel.start4.value!!
+        binding.imageStatus5= viewModel.start5.value!!
         initViews(view)
         db=FirebaseFirestore.getInstance()
-        val date= DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC).format(Instant.now())
+        binding.lifecycleOwner = this
+
+        // val date= DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC).format(Instant.now())
 
         btn1.setOnClickListener{
-            val device1 = Device("device1",1, Instant.now(), Instant.now(), GameType.SINGLE, 0,start)
+            val device1 = Device("device1",1, Instant.now(), Instant.now(), GameType.SINGLE, 0,viewModel.start1.value!!)
             startOrPause(btn1,device1,startTimeTV)
         }
         btn2.setOnClickListener{
-            val device2 = Device("device2",2,
-                Instant.now(),
-                Instant.now(), GameType.SINGLE, 0,start2)
+            val device2 = Device("device2",2, Instant.now(), Instant.now(), GameType.SINGLE, 0,viewModel.start2.value!!)
             startOrPause(btn2,device2,startTimeTV2)
         }
         btn3.setOnClickListener{
-            val device3 = Device("device3",3,
-                Instant.now(),
-                Instant.now(), GameType.SINGLE, 0,start3)
+            val device3 = Device("device3",3, Instant.now(), Instant.now(), GameType.SINGLE, 0,viewModel.start3.value!!)
             startOrPause(btn3,device3,startTimeTV3)
         }
         btn4.setOnClickListener{
-            val device4 = Device("device4",4,
-                Instant.now(),
-                Instant.now(), GameType.SINGLE, 0,start4)
+            val device4 = Device("device4",4, Instant.now(), Instant.now(), GameType.SINGLE, 0,viewModel.start4.value!!)
             startOrPause(btn4,device4,startTimeTV4)
         }
         btn5.setOnClickListener{
-            val device5 = Device("device5",5,
-                Instant.now(),
-                Instant.now(), GameType.SINGLE, 0,start5)
+            val device5 = Device("device5",5, Instant.now(), Instant.now(), GameType.SINGLE, 0,viewModel.start5.value!!)
             startOrPause(btn5,device5,startTimeTV5)
         }
-        button.setOnClickListener{
-            Log.i(TAG, "onCreate: ")
-            db.collection(date.toString())
-                .get().addOnSuccessListener{result->
-                    for(document in result){
-//                        Log.d(TAG,"${document.id}=>${document.data.values}")
-                        Log.d(TAG,"${document.data.values}")
-                        //totalmoneyEarned = totalmoneyEarned + document.data.values
-                    }
-                }
-                .addOnFailureListener{exception->
-                    Log.w(TAG,"Error getting documents.",exception)
-                }
-        }
+
+
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        changeUI()
+
+    }
+
+    private fun changeUI()
+    {
+        binding.imageStatus=viewModel.start1.value!!
+        binding.imageStatus2=viewModel.start2.value!!
+        binding.imageStatus3=viewModel.start3.value!!
+        binding.imageStatus4=viewModel.start4.value!!
+        binding.imageStatus5=viewModel.start5.value!!
+        startTimeTV.text =viewModel.time1.value
+        startTimeTV2.text =viewModel.time2.value
+        startTimeTV3.text =viewModel.time3.value
+        startTimeTV4.text =viewModel.time4.value
+        startTimeTV5.text =viewModel.time5.value
+    }
     private fun startOrPause(btn:ImageButton, device: Device, textView: TextView) {
 
         if (!device.isPlaying) {
             btn.setImageResource(R.drawable.baseline_stop_24)
-          //  btn.text = "stop"
+
             device.isPlaying = true
             when(btn){
                 btn1 ->{
-                    instant1= Instant.now()
-                    device.startTime = instant1
-                    start =true
-                    viewModel.addNewDevice(
-                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start
-                    )
+                    viewModel.instant.value= Instant.now()
+                    device.startTime = viewModel.instant.value!!
+                    viewModel.start1.value =true
+                    viewModel.addNewDevice(device.name,device.id,device.startTime,device.endTime,device.type,device.price,viewModel.start1.value!!)
+                    changeUI()
                 }
                 btn2 ->{
-                    instant2= Instant.now()
-                    device.startTime = instant2
-                    start2 =true
-                    viewModel.addNewDevice(
-                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start2
-                    )
+                    viewModel.instant2.value= Instant.now()
+                    device.startTime =  viewModel.instant2.value!!
+                    viewModel.start2.value =true
+                    viewModel.addNewDevice(device.name,device.id,device.startTime,device.endTime,device.type,device.price,viewModel.start2.value!!)
+                    changeUI()
                 }
                 btn3 ->{
-                    instant3= Instant.now()
-                    device.startTime = instant3
-                    start3 =true
-                    viewModel.addNewDevice(
-                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start3
-                    )
+                    viewModel.instant3.value= Instant.now()
+                    device.startTime = viewModel.instant3.value!!
+                    viewModel.start3.value =true
+                    viewModel.addNewDevice(device.name,device.id,device.startTime,device.endTime,device.type,device.price,viewModel.start3.value!!)
+                    changeUI()
                 }
                 btn4 ->{
-                    instant4= Instant.now()
-                    device.startTime = instant4
-                    start4 =true
-                    viewModel.addNewDevice(
-                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start4
-                    )
+                    viewModel.instant4.value= Instant.now()
+                    device.startTime = viewModel.instant4.value!!
+                    viewModel.start4.value =true
+                    viewModel.addNewDevice(device.name,device.id,device.startTime,device.endTime,device.type,device.price,viewModel.start4.value!!)
+                    changeUI()
                 }
                 btn5 ->{
-                    instant5= Instant.now()
-                    device.startTime = instant5
-                    start5 =true
-                    viewModel.addNewDevice(
-                        device.name,device.id,device.startTime,device.endTime,device.type,device.price,start5
-                    )
+                    viewModel.instant5.value= Instant.now()
+                    device.startTime = viewModel.instant5.value!!
+                    viewModel.start5.value =true
+                    viewModel.addNewDevice(device.name,device.id,device.startTime,device.endTime,device.type,device.price,viewModel.start5.value!!)
+                    changeUI()
                 }
 
             }
             when(textView){
                 startTimeTV -> {
-                    startTimeTV.visibility=View.VISIBLE
-                    startTimeTV.text = DateTimeFormatter
-                        .ofPattern(" HH:mm:ss a")
-                        .withZone(ZoneId.of("UTC+2"))
-                        .format(device.startTime)}
+                    viewModel.time1.value=DateTimeFormatter.ofPattern(" HH:mm:ss a").withZone(ZoneId.of("UTC+2")).format(device.startTime)
+                    startTimeTV.text =viewModel.time1.value }
                 startTimeTV2 -> {
-                    startTimeTV2.visibility=View.VISIBLE
-                    startTimeTV2.text =  DateTimeFormatter
-                        .ofPattern(" HH:mm:ss a")
-                        .withZone(ZoneId.of("UTC+2"))
-                        .format(device.startTime)
+                    viewModel.time2.value=DateTimeFormatter.ofPattern(" HH:mm:ss a").withZone(ZoneId.of("UTC+2")).format(device.startTime)
+                    startTimeTV2.text =  viewModel.time2.value
                 }
                 startTimeTV3 ->{
-                    startTimeTV3.visibility=View.VISIBLE
-                    startTimeTV3.text =  DateTimeFormatter
-                        .ofPattern(" HH:mm:ss a")
-                        .withZone(ZoneId.of("UTC+2"))
-                        .format(device.startTime)}
+                    viewModel.time3.value=DateTimeFormatter.ofPattern(" HH:mm:ss a").withZone(ZoneId.of("UTC+2")).format(device.startTime)
+                    startTimeTV3.text = viewModel.time3.value}
                 startTimeTV4 ->{
-                    startTimeTV4.visibility=View.VISIBLE
-                    startTimeTV4.text =  DateTimeFormatter
-                        .ofPattern(" HH:mm:ss a")
-                        .withZone(ZoneId.of("UTC+2"))
-                        .format(device.startTime)}
+                    viewModel.time4.value=DateTimeFormatter.ofPattern(" HH:mm:ss a").withZone(ZoneId.of("UTC+2")).format(device.startTime)
+                    startTimeTV4.text =  viewModel.time4.value}
                 startTimeTV5 ->{
-                    startTimeTV5.visibility=View.VISIBLE
-                    startTimeTV5.text =  DateTimeFormatter
-                        .ofPattern(" HH:mm:ss a")
-                        .withZone(ZoneId.of("UTC+2"))
-                        .format(device.startTime)}
+                    viewModel.time5.value=DateTimeFormatter.ofPattern(" HH:mm:ss a").withZone(ZoneId.of("UTC+2")).format(device.startTime)
+                    startTimeTV5.text = viewModel.time5.value }
             }
 
         }
         else {
             btn.setImageResource(R.drawable.baseline_play_arrow_24)
-
-//            btn.text = "start"
             device.isPlaying = false
             when(btn){
                 btn1 ->{
-                    calcCost(instant1,device,device.dId)
-                    start=false
-                    startTimeTV.visibility=View.GONE
+                    calcCost(viewModel.instant.value!!,device,device.dId)
+                    viewModel.start1.value=false
+                    changeUI()
                 }
                 btn2 ->{
-                    startTimeTV2.visibility=View.GONE
-
-                    calcCost(instant2,device,device.dId)
-                    start2=false}
+                    calcCost(viewModel.instant2.value!!,device,device.dId)
+                    viewModel.start2.value=false
+                    changeUI()
+                }
                 btn3 ->{
-                    startTimeTV3.visibility=View.GONE
+                    calcCost(viewModel.instant3.value!!,device,device.dId)
+                    viewModel.start3.value=false
+                    changeUI()
 
-                    calcCost(instant3,device,device.dId)
-                    start3=false}
+                }
                 btn4 ->{
-                    startTimeTV4.visibility=View.GONE
+                    calcCost(viewModel.instant4.value!!,device,device.dId)
+                    viewModel.start4.value=false
+                    changeUI()
 
-                    calcCost(instant4,device,device.dId)
-                    start4=false}
+                }
                 btn5 ->{
-                    startTimeTV5.visibility=View.GONE
+                    calcCost(viewModel.instant5.value!!,device,device.dId)
+                    viewModel.start5.value=false
+                    changeUI()
 
-                    calcCost(instant5,device,device.dId)
-                    start5=false}
+                }
 
             }
 
@@ -247,7 +228,6 @@ class Fragment1 : Fragment() {
         startTimeTV3=view.findViewById(R.id.startTimeTV3)
         startTimeTV4=view.findViewById(R.id.startTimeTV4)
         startTimeTV5=view.findViewById(R.id.startTimeTV5)
-        button=view.findViewById(R.id.button)
 
     }
 
@@ -295,6 +275,7 @@ class Fragment1 : Fragment() {
             }
             title.price = price.toInt()
 
+            title.type=type
             Toast.makeText(activity,"price is $price  ", Toast.LENGTH_LONG).show()
             viewModel.updateDevice(
                 title.name,title.id,title.startTime,title.endTime,title.type,price.toInt(),false,did
@@ -302,18 +283,9 @@ class Fragment1 : Fragment() {
             val map = HashMap<String,Any>()
             map[title.name] = title.name
             map["price"] = price.toInt()
-            map["startTime"]= DateTimeFormatter
-                .ofPattern(" HH:mm:ss a")
-                .withZone(ZoneId.of("UTC+2"))
-                .format(title.startTime)
-            map["endTime"]= DateTimeFormatter
-                .ofPattern(" HH:mm:ss a")
-                .withZone(ZoneId.of("UTC+2"))
-                .format(title.endTime)
-            val date= DateTimeFormatter
-                .ofPattern("yyyy-MM-dd")
-                .withZone(ZoneOffset.UTC)
-                .format(title.startTime)
+            map["startTime"]= DateTimeFormatter.ofPattern(" HH:mm:ss a").withZone(ZoneId.of("UTC+2")).format(title.startTime)
+            map["endTime"]= DateTimeFormatter.ofPattern(" HH:mm:ss a").withZone(ZoneId.of("UTC+2")).format(title.endTime)
+            val date= DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC).format(title.startTime)
             val dayRef=db.collection(date).document()
             dayRef.set(map)
 
@@ -331,24 +303,14 @@ class Fragment1 : Fragment() {
             val map = HashMap<String,Any>()
             map[title.name] = title.name
             map["price"] = price.toInt()
-            map["startTime"]= DateTimeFormatter
-                .ofPattern(" HH:mm:ss a")
-                .withZone(ZoneId.of("UTC+2"))
-                .format(title.startTime)
-            map["endTime"]= DateTimeFormatter
-                .ofPattern(" HH:mm:ss a")
-                .withZone(ZoneId.of("UTC+2"))
-                .format(title.endTime)
-            val date= DateTimeFormatter
-                .ofPattern("yyyy-MM-dd")
-                .withZone(ZoneOffset.UTC)
-                .format(title.startTime)
+            map["startTime"]= DateTimeFormatter.ofPattern(" HH:mm:ss a").withZone(ZoneId.of("UTC+2")).format(title.startTime)
+            map["endTime"]= DateTimeFormatter.ofPattern(" HH:mm:ss a").withZone(ZoneId.of("UTC+2")).format(title.endTime)
+            val date= DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC).format(title.startTime)
             val dayRef=db.collection(date).document()
             dayRef.set(map)
             viewModel.updateDevice(
                 title.name,title.id,title.startTime,title.endTime,title.type,price.toInt(),false,did
             )
-            //db.collection("Money").add(map)
         }
     }
 
